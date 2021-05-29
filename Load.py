@@ -3,6 +3,14 @@ from PyQt5.QtCore import QThread
 
 class Loop(QThread):
     
+    def size(byte):
+        #Esta Função Faz a Conversão de bytes Para Um Formato Mais Legivel ao Usuario.
+
+        for i in ["B","KB","MB","GB","TB"]:
+            if byte < 1024:
+                return f"{byte:.2f} {i}"
+            byte = byte / 1024
+
     # Imprimir Informações da CPU.
     def print_CPU(self, ui):
 
@@ -127,20 +135,27 @@ class Loop(QThread):
 
         CPUInfo = cpuinfo.get_cpu_info()
 
+        # Tenta Obter Informações Sobre "Cache L1", Caso Não Encontre Desligar lineEdit
         if "l1_data_cache_size" in CPUInfo:
-            ui.lineEdit_L1Data.setText(str(CPUInfo['l1_data_cache_size']))
+            ui.lineEdit_L1Data.setText(str(Loop.size(CPUInfo['l1_data_cache_size'])))
         else:
             ui.lineEdit_L1Data.setEnabled(False)
+
+        # Tenta Obter Informações Sobre "Cache Size", Caso Não Encontre Desligar lineEdit
         if "l1_instruction_cache_size" in CPUInfo:
-            ui.lineEdit_L1Inst.setText(str(CPUInfo['l1_instruction_cache_size']))
+            ui.lineEdit_L1Inst.setText(str(Loop.size(CPUInfo['l1_instruction_cache_size'])))
         else:
             ui.lineEdit_L1Inst.setEnabled(False)
+
+        # Tenta Obter Informações Sobre "Cache L2", Caso Não Encontre Desligar lineEdit
         if "l2_cache_size" in CPUInfo:
-            ui.lineEdit_L2.setText(str(CPUInfo['l2_cache_size']))
+            ui.lineEdit_L2.setText(str(Loop.size(CPUInfo['l2_cache_size'])))
         else:
             ui.lineEdit_L2.setEnabled(False)
+
+        # Tenta Obter Informações Sobre "Cache L3", Caso Não Encontre Desligar lineEdit
         if "l3_cache_size" in CPUInfo:
-            ui.lineEdit_L3.setText(str(CPUInfo['l3_cache_size']))
+            ui.lineEdit_L3.setText(str(Loop.size(CPUInfo['l3_cache_size'])))
         else:
             ui.lineEdit_L3.setEnabled(False)
 
